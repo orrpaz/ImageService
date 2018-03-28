@@ -49,12 +49,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Controller\Handlers\DirectoyHandler.cs" />
+    <Compile Include="Controller\Handlers\IDirectoryHandler.cs" />
+    <Compile Include="Controller\IImageController.cs" />
+    <Compile Include="Controller\ImageController.cs" />
     <Compile Include="ImageService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ImageService.Designer.cs">
       <DependentUpon>ImageService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modal\IImageModal.cs" />
+    <Compile Include="Modal\ImageServiceModal.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -63,17 +73,41 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="Server\ImageServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageService.resx">
       <DependentUpon>ImageService.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="obj\Debug\ImageService.ImageService.resources" />
+    <EmbeddedResource Include="obj\Debug\ImageService.ProjectInstaller.resources" />
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\ImageService.exe" />
+    <Content Include="bin\Debug\ImageService.pdb" />
+    <Content Include="bin\Debug\ImageService.vshost.exe" />
+    <Content Include="obj\Debug\ImageService.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\ImageService.exe" />
+    <Content Include="obj\Debug\ImageService.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="bin\Debug\ImageService.exe.config" />
+    <None Include="bin\Debug\ImageService.InstallLog" />
+    <None Include="bin\Debug\ImageService.vshost.exe.config" />
+    <None Include="bin\Debug\ImageService.vshost.exe.manifest" />
+    <None Include="bin\Debug\InstallUtil.InstallLog" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\ImageService.csproj.GenerateResource.Cache" />
+    <None Include="obj\Debug\ImageService.csprojResolveAssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
