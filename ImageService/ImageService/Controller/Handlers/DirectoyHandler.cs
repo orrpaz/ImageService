@@ -72,7 +72,7 @@ namespace ImageService.Controller.Handlers
                     return;
                 }
 
-
+                // task ?
                 if (e.RequestDirPath.Equals(this.m_path))
                 {
                     string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out isSuccess);
