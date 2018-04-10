@@ -43,6 +43,7 @@ namespace ImageService.Modal
 
         public string AddFile(string path, out bool result)
         {
+            
             try
             {
                 string year = String.Empty;
@@ -62,14 +63,26 @@ namespace ImageService.Modal
                     string TargetFolder = m_OutputFolder + "\\" + year + "\\" + month + "\\";
                     if (!File.Exists(TargetFolder + Path.GetFileName(path)))
                     {
-                        File.Copy(path, TargetFolder + Path.GetFileName(path));
+                        File.Move(path, TargetFolder + Path.GetFileName(path));
                         msg = "Added " + Path.GetFileName(path) + " to " + TargetFolder;
+                    } else
+                    { 
+                            result = false;
+                            return "file's name is already exist";
+                        
                     }
+
                     if (!File.Exists((m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path))))
                     {
-                        Image image = Image.FromFile(path);
-                        Image thumb = image.GetThumbnailImage(m_thumbnailSize, m_thumbnailSize, () => false, IntPtr.Zero);
-                         thumb.Save(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path));
+                        using (Image image = Image.FromFile(m_OutputFolder + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path)))
+                        using (Image thumb = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero))
+                        {
+                            thumb.Save(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path));
+                            thumb.Dispose();
+                            image.Dispose();
+                        }   
+
+                       
 
                     }
                     result = true;

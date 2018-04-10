@@ -64,7 +64,7 @@ namespace ImageService.Controller.Handlers
             {
                 bool isSuccess;
 
-                // if the command is close
+               
                 if (e.CommandID == (int)CommandEnum.CloseCommand)
                 {
                     m_logging.Log("Close command execute in handler", MessageTypeEnum.INFO);
@@ -72,13 +72,12 @@ namespace ImageService.Controller.Handlers
                     return;
                 }
 
-                // task ?
                 if (e.RequestDirPath.Equals(this.m_path))
                 {
                     string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out isSuccess);
                     if (isSuccess)
                     {
-                        m_logging.Log("The command execute succesful", MessageTypeEnum.INFO);
+                        m_logging.Log(msg, MessageTypeEnum.INFO);
                     }
                     else
                     {
@@ -96,9 +95,9 @@ namespace ImageService.Controller.Handlers
             string msg;
             try
             {
-                this.m_dirWatcher.EnableRaisingEvents = false;
+                m_dirWatcher.EnableRaisingEvents = false;
                 msg = "Handler at path " + m_path + " closed";
-                DirectoryCloseEventArgs closeArgs = new DirectoryCloseEventArgs(this.m_path, msg);
+                DirectoryCloseEventArgs closeArgs = new DirectoryCloseEventArgs(m_path, msg);
 
                 DirectoryClose?.Invoke(this, closeArgs);
             }
@@ -109,8 +108,8 @@ namespace ImageService.Controller.Handlers
             }
             finally
             {
-                this.m_dirWatcher.Created -= new FileSystemEventHandler(OnChange);
-                this.m_dirWatcher.Changed -= new FileSystemEventHandler(OnChange);
+               m_dirWatcher.Created -= new FileSystemEventHandler(OnChange);
+               m_dirWatcher.Changed -= new FileSystemEventHandler(OnChange);
             }
 
             
@@ -124,8 +123,8 @@ namespace ImageService.Controller.Handlers
         private void OnChange(object source, FileSystemEventArgs e)
         {
             string[] args = { e.FullPath };
-            string fileType = Path.GetExtension(e.FullPath).ToLower();
-            if (extension.Contains(fileType))
+            string type = Path.GetExtension(e.FullPath);
+            if (extension.Contains(type.ToLower()))
             {
                 CommandRecievedEventArgs eventArgs = new CommandRecievedEventArgs((int)CommandEnum.NewFileCommand, args, m_path);
                 OnCommandRecieved(this, eventArgs);

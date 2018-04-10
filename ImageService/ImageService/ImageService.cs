@@ -82,6 +82,7 @@ namespace ImageService
 
             // create LoggingService, ImageServiceModal, ImageController
             logging = new LoggingService();
+            logging.MessageRecieved += eventLog1_EntryWritten;
             modal = new ImageServiceModal(outputFolder, thumbnailSize);
             controller = new ImageController(modal);
 
