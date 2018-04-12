@@ -70,8 +70,7 @@ namespace ImageService.Server
         /// </summary>
         public void CloseServer()
         {
-            CommandRecievedEventArgs commandArgs = new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null);
-            SendCommand(commandArgs);
+            SendCommand(new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null));
         }
 
         /// <summary>
