@@ -20,6 +20,13 @@ namespace ImageService.Modal
         private string m_OutputFolder;            // The Output Folder
         private int m_thumbnailSize;
         private static Regex r = new Regex(":");
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="outputFolder">The target folder of the Image </param>
+        /// <param name="thumbnailSize">size of thumbnail image. </param>
+
+
         public ImageServiceModal(string outputFolder, int thumbnailSize)
         {
             m_OutputFolder = outputFolder;
@@ -35,68 +42,105 @@ namespace ImageService.Modal
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             using (Image myImage = Image.FromStream(fs, false, false))
             {
-                PropertyItem propItem = myImage.GetPropertyItem(36867);
-                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                return DateTime.Parse(dateTaken);
+                PropertyItem propItem = null;
+                try
+                {
+                    propItem = myImage.GetPropertyItem(36867);
+                }
+                catch { }
+                if (propItem != null)
+                {
+                    string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                    return DateTime.Parse(dateTaken);
+                }
+                else
+                    return new FileInfo(path).LastWriteTime;
+
             }
         }
 
-        public string AddFile(string path, out bool result)
+
+        /// <summary>
+        /// this method check for the existence of files with tempFileName and increment
+        /// the number by one until it finds a name that does not exist in the directory.
+        /// </summary>
+        /// <param name="path">The Path of the Image from the file</param>
+        /// <param name="target">The target Path of the Image</param>
+        /// <returns>new full path of Image.</returns>
+        public string CheckIfExists(string path,string target)
         {
-            
-            try
+            int count = 1;
+
+            string fileNameOnly = Path.GetFileNameWithoutExtension(path);
+            string extension = Path.GetExtension(path);
+            // string directoryPath = Path.GetDirectoryName(path);
+             string newFullPath = fileNameOnly + extension;
+
+            while (File.Exists(target + newFullPath))
             {
-                string year = String.Empty;
-                string month = String.Empty;
-                string msg = string.Empty;
-                if (File.Exists(path))
+                string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
+                newFullPath = tempFileName + extension;
+            }
+            return newFullPath;
+        }
+    public string AddFile(string path, out bool result)
+        {
+            int count=0;
+            if (File.Exists(path))
+            {
+                  DateTime date;
+                try
                 {
-                    // DateTime date = File.GetCreationTime(path);
-                    DateTime date = GetDateTakenFromImage(path);
+                    // get the taken date of the image , if there isnt taken date than get the LastWriteTime
+                    date = GetDateTakenFromImage(path);  
+                    string year = String.Empty;
+                    string month = String.Empty;
+                    string msg = string.Empty;
+                   
                     year = date.Year.ToString();
                     month = date.Month.ToString();
+                    string yearAndMonth = year + "\\" + month;
                     DirectoryInfo directory = Directory.CreateDirectory(m_OutputFolder);
                     directory.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                    //Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails");
-                    Directory.CreateDirectory(m_OutputFolder + "\\" + year + "\\" + month);
-                    Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month);
-                    string TargetFolder = m_OutputFolder + "\\" + year + "\\" + month + "\\";
-                    if (!File.Exists(TargetFolder + Path.GetFileName(path)))
+                    // create output folder.
+                    string TargetFolder = m_OutputFolder + "\\" + yearAndMonth + "\\";
+                    Directory.CreateDirectory(m_OutputFolder + "\\" +yearAndMonth);
+                    Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth);
+                    
+                    string p = CheckIfExists(path, TargetFolder);
+                    if (!File.Exists(TargetFolder + p))
                     {
-                        File.Move(path, TargetFolder + Path.GetFileName(path));
-                        msg = "Added " + Path.GetFileName(path) + " to " + TargetFolder;
-                    } else
-                    { 
-                            result = false;
-                            return "file's name is already exist";
-                        
+                        File.Move(path, TargetFolder + p);
+                        msg = "Added " + p + " to " + TargetFolder;
+                        count ++;
                     }
+                  
 
-                    if (!File.Exists((m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path))))
+                    if (!File.Exists(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\" + p))
                     {
-                        using (Image image = Image.FromFile(m_OutputFolder + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path)))
-                        using (Image thumb = image.GetThumbnailImage(this.m_thumbnailSize, this.m_thumbnailSize, () => false, IntPtr.Zero))
+                        using (Image image = Image.FromFile(m_OutputFolder + "\\" + yearAndMonth + "\\" + p))
+                        using (Image thumb = image.GetThumbnailImage(m_thumbnailSize, m_thumbnailSize, () => false, IntPtr.Zero))
                         {
-                            thumb.Save(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month + "\\" + Path.GetFileName(path));
+                            thumb.Save(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\" + p);
+                            count++;
                             thumb.Dispose();
                             image.Dispose();
-                        }   
-
-                       
+                        }
 
                     }
+                    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
                     result = true;
                     return msg;
                 }
-                else
+                catch (Exception e)
                 {
-                    throw new Exception("File doesn't exists");
+                    result = false;
+                    return "Error in taking date from image" + e.Message;
                 }
-            } catch (Exception e)
+            } else
             {
-                // return the exception
                 result = false;
-                return e.Message;
+                return "file didnt exist";
             }
         }
         #endregion

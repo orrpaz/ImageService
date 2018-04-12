@@ -25,19 +25,39 @@ namespace ImageService.Controller
             commands = new Dictionary<int, ICommand>()
             {
 				// For Now will contain NEW_FILE_COMMAND
-                 {(int)CommandEnum.NewFileCommand, new NewFileCommand(m_modal)}
+                 {
+                    (int)CommandEnum.NewFileCommand, new NewFileCommand(m_modal)}
             };
         }
 
-      
-        public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
+
+        public string ExecuteCommand(int commandID, string[] args, out bool resultSuccessful)
         {
-            if (commands.ContainsKey(commandID))
+            ICommand command;
+        
+            if (commands.TryGetValue(commandID, out command))
             {
-                return commands[commandID].Execute(args, out resultSuccesful);
+              
+                Task<Tuple<string, bool>> t = new Task<Tuple<string, bool>>(() => {
+                    
+                    bool result;
+                    return Tuple.Create(command.Execute(args, out result), result);
+                });
+               
+                t.Start();
+                System.Threading.Thread.Sleep(1);
+                
+                Tuple<string, bool> output = t.Result;
+                resultSuccessful = output.Item2;
+                return output.Item1;
             }
-            resultSuccesful = false; 
-            return "Not such a command";
+            else
+            {
+                resultSuccessful = false;
+                return "Not a command";
+            }
         }
     }
 }
+       // }
+   

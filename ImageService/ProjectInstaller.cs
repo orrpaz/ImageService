@@ -20,16 +20,11 @@ namespace ImageService
         {
 
         }
-
+            
         private void serviceProcessInstaller1_AfterInstall(object sender, InstallEventArgs e)
         {
 
         }
-        protected override void OnBeforeInstall(IDictionary savedState)
-        {
-            string parameter = "IMSource20\" \"ImLogFile20";
-            Context.Parameters["assemblypath"] = "\"" + Context.Parameters["assemblypath"] + "\" \"" + parameter + "\"";
-            base.OnBeforeInstall(savedState);
-        }
+      
     }
 }
