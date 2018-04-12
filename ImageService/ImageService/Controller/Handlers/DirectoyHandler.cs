@@ -61,6 +61,7 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">event args</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
+            m_logging.Log("OnCommandRecieved", MessageTypeEnum.INFO);
             {
                 bool isSuccess;
 

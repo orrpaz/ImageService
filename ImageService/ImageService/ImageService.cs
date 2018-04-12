@@ -59,10 +59,10 @@ namespace ImageService
             InitializeComponent();
 
             // for APP.config
-            string outputFolder = ConfigurationManager.AppSettings.Get("OutputDir");
-            int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings.Get("ThumbnailSize"));
-            string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
-            string logName = ConfigurationManager.AppSettings.Get("LogName");
+            string outputFolder = ConfigurationManager.AppSettings["OutputDir"];
+            int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
+            string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
+            string logName = ConfigurationManager.AppSettings["LogName"];
            
             if (args.Count() > 0)
             {
