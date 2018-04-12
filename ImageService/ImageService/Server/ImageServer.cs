@@ -33,9 +33,11 @@ namespace ImageService.Server
         {
             m_controller = controller;
             m_logging = logging;
+            // read from App config and put handlers in array of string.
             string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
             foreach (string directoryPath in directories)
             {
+                // create handler for each path.
                 CreateHandler(directoryPath);
             }
         }
@@ -59,19 +61,18 @@ namespace ImageService.Server
         /// <param name="e">args for the event</param>
         public void RemoveHandler(object source, DirectoryCloseEventArgs e)
         {
-            IDirectoryHandler directoryHandler = (IDirectoryHandler)source;
-            CommandRecieved -= directoryHandler.OnCommandRecieved;
-            directoryHandler.DirectoryClose -= RemoveHandler;
+            IDirectoryHandler handler = (IDirectoryHandler)source;
+            CommandRecieved -= handler.OnCommandRecieved;
+            handler.DirectoryClose -= RemoveHandler;
             m_logging.Log(e.Message, MessageTypeEnum.INFO);
         }
 
         /// <summary>
-        /// this method send to handlers that the server was colsed.
+        /// this method send to handlers that the server was closed.
         /// </summary>
         public void CloseServer()
         {
-            CommandRecievedEventArgs commandArgs = new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null);
-            SendCommand(commandArgs);
+            SendCommand(new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null));
         }
 
         /// <summary>
