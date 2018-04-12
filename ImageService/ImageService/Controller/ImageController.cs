@@ -41,12 +41,12 @@ namespace ImageService.Controller
                 Task<Tuple<string, bool>> t = new Task<Tuple<string, bool>>(() => {
                     
                     bool result;
-                    return Tuple.Create(command.Execute(args, out result), result);
+
+                    string msg = command.Execute(args, out result);
+                    return Tuple.Create(msg, result);
                 });
                
-                t.Start();
-                System.Threading.Thread.Sleep(1);
-                
+                t.Start();                
                 Tuple<string, bool> output = t.Result;
                 resultSuccessful = output.Item2;
                 return output.Item1;
@@ -54,7 +54,7 @@ namespace ImageService.Controller
             else
             {
                 resultSuccessful = false;
-                return "Not a command";
+                return "There is no such command";
             }
         }
     }
