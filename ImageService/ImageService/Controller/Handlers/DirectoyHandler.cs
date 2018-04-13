@@ -39,8 +39,6 @@ namespace ImageService.Controller.Handlers
             m_controller = controller;
             m_path = path;
             m_dirWatcher = new FileSystemWatcher(m_path);
-
-        
         }
 
 
