@@ -48,7 +48,7 @@ namespace ImageService.Controller.Handlers
         /// <param name="dirPath">path to the directory</param>
         public void StartHandleDirectory(string dirPath)
         {
-            //m_dirWatcher.Changed += new FileSystemEventHandler(OnChange);
+            m_dirWatcher.Changed += new FileSystemEventHandler(OnChange);
             m_dirWatcher.Created += new FileSystemEventHandler(OnChange);
             m_dirWatcher.EnableRaisingEvents = true;
         }
@@ -110,7 +110,7 @@ namespace ImageService.Controller.Handlers
             finally
             {
                m_dirWatcher.Created -= new FileSystemEventHandler(OnChange);
-             //  m_dirWatcher.Changed -= new FileSystemEventHandler(OnChange);
+               m_dirWatcher.Changed -= new FileSystemEventHandler(OnChange);
             }
 
             
