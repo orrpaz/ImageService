@@ -87,7 +87,6 @@ namespace ImageService.Modal
         {
             int count=0;
             if (File.Exists(path))
-               
             {
                   DateTime date;
                 try
@@ -129,7 +128,7 @@ namespace ImageService.Modal
                         }
 
                     }
-                //    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
+                    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
                     result = true;
                     return msg;
                 }
@@ -138,11 +137,10 @@ namespace ImageService.Modal
                     result = false;
                     return "Error in taking date from image" + e.Message;
                 }
-            }
-            else
+            } else
             {
                 result = false;
-                return path + "file didnt exist";
+                return "file didnt exist";
             }
         }
         #endregion
