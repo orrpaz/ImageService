@@ -85,8 +85,10 @@ namespace ImageService.Modal
         }
     public string AddFile(string path, out bool result)
         {
+            System.Threading.Thread.Sleep(100);
             int count=0;
             if (File.Exists(path))
+               
             {
                   DateTime date;
                 try
@@ -106,7 +108,8 @@ namespace ImageService.Modal
                     string TargetFolder = m_OutputFolder + "\\" + yearAndMonth + "\\";
                     Directory.CreateDirectory(m_OutputFolder + "\\" +yearAndMonth);
                     Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth);
-                    
+
+                    System.Threading.Thread.Sleep(10);
                     string p = CheckIfExists(path, TargetFolder);
                     if (!File.Exists(TargetFolder + p))
                     {
@@ -123,12 +126,9 @@ namespace ImageService.Modal
                         {
                             thumb.Save(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\" + p);
                             count++;
-                            thumb.Dispose();
-                            image.Dispose();
                         }
-
                     }
-                    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
+                //    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
                     result = true;
                     return msg;
                 }
@@ -137,10 +137,11 @@ namespace ImageService.Modal
                     result = false;
                     return "Error in taking date from image" + e.Message;
                 }
-            } else
+            }
+            else
             {
                 result = false;
-                return "file didnt exist";
+                return path + "file didnt exist";
             }
         }
         #endregion

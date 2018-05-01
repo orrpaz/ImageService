@@ -46,7 +46,9 @@ namespace ImageService.Controller
                     return Tuple.Create(msg, result);
                 });
                
-                t.Start();                
+                t.Start();
+                System.Threading.Thread.Sleep(1);
+
                 Tuple<string, bool> output = t.Result;
                 resultSuccessful = output.Item2;
                 return output.Item1;
