@@ -1,15 +1,15 @@
 ﻿using ImageService.Modal;
-using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ImageService.Infrastructure;
+using System;
+using System.Text.RegularExpressions;
+using System.IO;
 using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
+using ImageService.Infrastructure;
 using ImageService.Logging.Modal;
-using System.Text.RegularExpressions;
 
 namespace ImageService.Controller.Handlers
 {
@@ -20,7 +20,7 @@ namespace ImageService.Controller.Handlers
         private ILoggingService m_logging;
         private FileSystemWatcher m_dirWatcher;             // The Watcher of the Dir
         private string m_path;
-        private readonly string[] extension = { ".jpg", ".png", ".gif", ".bmp" };
+        private readonly string[] extension = { ".png", ".gif", ".jpg", ".bmp" };
         #endregion
 
         // The Event That Notifies that the Directory is being closed
