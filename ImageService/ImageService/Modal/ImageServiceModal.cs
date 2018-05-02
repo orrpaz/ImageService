@@ -73,6 +73,7 @@ namespace ImageService.Modal
         
         public string AddFile(string path, out bool result)
         {
+            System.Threading.Thread.Sleep(100);
             int count=0;
             if (File.Exists(path))
                
@@ -95,7 +96,8 @@ namespace ImageService.Modal
                     string TargetFolder = m_OutputFolder + "\\" + yearAndMonth + "\\";
                     Directory.CreateDirectory(m_OutputFolder + "\\" +yearAndMonth);
                     Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth);
-                    
+
+                    System.Threading.Thread.Sleep(10);
                     string p = CheckIfExists(path, TargetFolder);
                     if (!File.Exists(TargetFolder + p))
                     {
@@ -112,10 +114,7 @@ namespace ImageService.Modal
                         {
                             thumb.Save(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\" + p);
                             count++;
-                            thumb.Dispose();
-                            image.Dispose();
                         }
-
                     }
                 //    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
                     result = true;

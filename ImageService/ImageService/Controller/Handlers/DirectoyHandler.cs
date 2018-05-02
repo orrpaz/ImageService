@@ -38,7 +38,7 @@ namespace ImageService.Controller.Handlers
             m_logging = logging;
             m_controller = controller;
             m_path = path;
-            m_dirWatcher = new FileSystemWatcher(m_path);
+          
         }
 
 
@@ -48,10 +48,21 @@ namespace ImageService.Controller.Handlers
         /// <param name="dirPath">path to the directory</param>
         public void StartHandleDirectory(string dirPath)
         {
-            //m_dirWatcher.Changed += new FileSystemEventHandler(OnChange);
-            m_dirWatcher.Created += new FileSystemEventHandler(OnChange);
-            m_dirWatcher.EnableRaisingEvents = true;
+            try {
+                // create FileSystemWatcher to handle.
+                m_dirWatcher = new FileSystemWatcher(m_path);
+                //m_dirWatcher.Path = m_path;
+                //m_dirWatcher.Filter = "*";
+                // m_dirWatcher.Changed += new FileSystemEventHandler(OnChange);
+                m_dirWatcher.Created += new FileSystemEventHandler(OnChange);
+                m_dirWatcher.EnableRaisingEvents = true;
+
+            } catch (Exception e)
+            {
+                m_logging.Log(e.Message, MessageTypeEnum.FAIL);
+            }
         }
+
 
 
         /// <summary>
@@ -61,11 +72,9 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">event args</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            m_logging.Log("OnCommandRecieved", MessageTypeEnum.INFO);
+            m_logging.Log("On Command Recieved", MessageTypeEnum.INFO);
             {
                 bool isSuccess;
-
-               
                 if (e.CommandID == (int)CommandEnum.CloseCommand)
                 {
                     m_logging.Log("Close command execute in handler", MessageTypeEnum.INFO);
@@ -98,9 +107,9 @@ namespace ImageService.Controller.Handlers
             {
                 m_dirWatcher.EnableRaisingEvents = false;
                 msg = "Handler at path " + m_path + " closed";
-                DirectoryCloseEventArgs closeArgs = new DirectoryCloseEventArgs(m_path, msg);
-
-                DirectoryClose?.Invoke(this, closeArgs);
+                m_dirWatcher.Dispose();
+                m_dirWatcher.Created -= new FileSystemEventHandler(OnChange);
+               
             }
             catch (Exception)
             {
@@ -109,8 +118,10 @@ namespace ImageService.Controller.Handlers
             }
             finally
             {
-               m_dirWatcher.Created -= new FileSystemEventHandler(OnChange);
-             //  m_dirWatcher.Changed -= new FileSystemEventHandler(OnChange);
+                msg = "Handler at path " + m_path + " closed";
+                DirectoryCloseEventArgs closeArgs = new DirectoryCloseEventArgs(m_path, msg);
+                DirectoryClose?.Invoke(this, closeArgs);
+                //  m_dirWatcher.Changed -= new FileSystemEventHandler(OnChange);
             }
 
             
@@ -123,6 +134,7 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">event args</param>
         private void OnChange(object source, FileSystemEventArgs e)
         {
+            System.Threading.Thread.Sleep(10);
             string[] args = { e.FullPath };
             string type = Path.GetExtension(e.FullPath);
             // check if the extension exist in the list of extension.
