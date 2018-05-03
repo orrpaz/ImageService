@@ -36,13 +36,6 @@
     <StartupObject>ImageService.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Commands">
-      <HintPath>..\..\..\..\..\..\BasicMVVMQuickstart_Desktop\bin\Debug\Commands.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -59,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageService\Commands\GetConfigCommand.cs" />
-    <Compile Include="ImageService\ConfigInfomation.cs" />
     <Compile Include="ImageService\ImageService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -94,6 +86,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ImageService\ImageService.resx">
       <DependentUpon>ImageService.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\ImageService.ImageService.resources" />
     <EmbeddedResource Include="obj\Debug\ImageService.ProjectInstaller.resources" />
@@ -110,7 +103,6 @@
     <Content Include="obj\Debug\ImageService.pdb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="bin\Debug\ImageService.exe.config" />
     <None Include="bin\Debug\ImageService.InstallLog" />
     <None Include="bin\Debug\ImageService.vshost.exe.config" />
@@ -121,7 +113,6 @@
     <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="obj\Debug\ImageService.csproj.GenerateResource.Cache" />
     <None Include="obj\Debug\ImageService.csprojResolveAssemblyReference.cache" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Release\" />

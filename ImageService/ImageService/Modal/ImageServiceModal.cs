@@ -39,26 +39,13 @@ namespace ImageService.Modal
         /// <returns>return the date that image was taken.</returns>
         public static DateTime GetDateTakenFromImage(string path)
         {
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (Image myImage = Image.FromStream(fs, false, false))
+            using (Image myImage = Image.FromFile(path))
             {
-                PropertyItem propItem = null;
-                try
-                {
-                    propItem = myImage.GetPropertyItem(36867);
-                }
-                catch { }
-                if (propItem != null)
-                {
-                    string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                    return DateTime.Parse(dateTaken);
-                }
-                else
-                    return new FileInfo(path).LastWriteTime;
-
+                PropertyItem propItem = myImage.GetPropertyItem(36867);
+                string dateTaken = new Regex(":").Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                return DateTime.Parse(dateTaken);
             }
         }
-
 
         /// <summary>
         /// this method check for the existence of files with tempFileName and increment
@@ -83,7 +70,8 @@ namespace ImageService.Modal
             }
             return newFullPath;
         }
-    public string AddFile(string path, out bool result)
+        
+        public string AddFile(string path, out bool result)
         {
             System.Threading.Thread.Sleep(100);
             int count=0;
