@@ -42,6 +42,7 @@ namespace ImageService
     };
     public partial class ImageService : ServiceBase
     {
+        private ConfigInfomation info;
         private ImageServer m_imageServer;          // The Image Server
         private IImageServiceModal modal;
         private IImageController controller;
@@ -57,16 +58,17 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-
+            info = ConfigInfomation.CreateConfigInfomation();
             // for APP.config
-            string outputFolder = ConfigurationManager.AppSettings["OutputDir"];
-            int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
-            string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
-            string logName = ConfigurationManager.AppSettings["LogName"];
-           
+            // string outputFolder = ConfigurationManager.AppSettings["OutputDir"];
+            //   int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
+            //  string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
+            //  string logName = ConfigurationManager.AppSettings["LogName"];
+            string eventSourceName = info.eventSourceName;
+            string logName = info.logName;
             if (args.Count() > 0)
             {
-                eventSourceName = args[0];
+               eventSourceName = args[0];
             }
             if (args.Count() > 1)
             {
@@ -83,7 +85,7 @@ namespace ImageService
             // create LoggingService, ImageServiceModal, ImageController
             logging = new LoggingService();
             logging.MessageRecieved += eventLog1_EntryWritten;
-            modal = new ImageServiceModal(outputFolder, thumbnailSize);
+            modal = new ImageServiceModal(info.outputDir, info.thumbnailSize);
             controller = new ImageController(modal);
 
 
@@ -105,7 +107,7 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            m_imageServer = new ImageServer(controller, logging);
+            m_imageServer = new ImageServer(controller, logging, info.handlerPaths);
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 60000; // 60 seconds  
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
