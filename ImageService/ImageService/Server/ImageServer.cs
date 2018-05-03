@@ -40,7 +40,7 @@ namespace ImageService.Server
             m_controller = controller;
             m_logging = logging;
             // read from App config and put handlers in array of string.
-           // string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
+            // string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
             foreach (string directoryPath in directories)
             {
                 // create handler for each path. 
@@ -97,7 +97,8 @@ namespace ImageService.Server
 
             listener.Start();
             Console.WriteLine("Waiting for connections...");
-            Task task = new Task(() => {
+            Task task = new Task(() =>
+            {
                 while (true)
                 {
                     try
@@ -118,24 +119,6 @@ namespace ImageService.Server
         public void Stop()
         {
             listener.Stop();
-        }
-    }
-
-    public void HandleClient(TcpClient client)
-        {
-            new Task(() =>
-            {
-                using (NetworkStream stream = client.GetStream())
-                using (StreamReader reader = new StreamReader(stream))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    string commandLine = reader.ReadLine();
-                    Console.WriteLine("Got command: {0}", commandLine);
-                    string result = ExecuteCommand(commandLine, client);
-                    writer.Write(result);
-                }
-                client.Close();
-            }).Start();
         }
     }
 }

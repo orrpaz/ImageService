@@ -8,8 +8,6 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-
-
 namespace ImageService
 {
     class ConfigInfomation
@@ -32,7 +30,7 @@ namespace ImageService
             string logName = ConfigurationManager.AppSettings["LogName"];
             string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
 
-
+        
             // dynamic jsonObject = new JObject();
             // jsonObject.handlerPaths = JsonConvert.SerializeObject(handlerPaths);
             //  jsonObject.outputDir = outputDir;
