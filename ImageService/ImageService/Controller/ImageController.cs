@@ -46,7 +46,7 @@ namespace ImageService.Controller
                     string msg = command.Execute(args, out result);
                     return Tuple.Create(msg, result);
                 });
-               
+                
                 t.Start();
                 System.Threading.Thread.Sleep(1);
 

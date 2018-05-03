@@ -48,7 +48,7 @@ namespace ImageService
         private IImageController controller;
         private ILoggingService logging;
         private int eventId = 1;
-        [DllImport("advapi32.dll", SetLastError = true)]
+        [DllImport("advapi32.dll", SetLastError = true)] 
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
         /// <summary>

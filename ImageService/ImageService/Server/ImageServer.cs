@@ -37,7 +37,7 @@ namespace ImageService.Server
            // string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
             foreach (string directoryPath in directories)
             {
-                // create handler for each path.
+                // create handler for each path. 
                 CreateHandler(directoryPath);
             }
         }

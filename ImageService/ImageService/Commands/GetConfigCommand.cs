@@ -13,7 +13,7 @@ namespace ImageService.Commands
         {
             ConfigInfomation info = ConfigInfomation.CreateConfigInfomation();
             result = true;
-            return info.ToJson();
+            return info.ToJson(); 
         }
     } 
 }
