@@ -12,7 +12,7 @@ namespace ImageServiceGUI.ViewModel
     class VMSetting : INotifyPropertyChanged
     {
         private SettingModel settingModel;
-        private ObservableCollection<string> lbHandlers = new ObservableCollection<string>();
+        private ObservableCollection<string> handlers { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -25,6 +25,7 @@ namespace ImageServiceGUI.ViewModel
         }
         public VMSetting()
         {
+            handlers = new ObservableCollection<string>();
             settingModel = new SettingModel();
             settingModel.PropertyChanged +=
             delegate (Object sender, PropertyChangedEventArgs e) {
@@ -34,10 +35,7 @@ namespace ImageServiceGUI.ViewModel
             // continue..
         }
 
-        public ObservableCollection<string> LbHandlers
-        {
-            get { return lbHandlers; }
-        }
+      
         public string VM_OutputDirectory
         {
             get { return settingModel.OutputDirectory; }

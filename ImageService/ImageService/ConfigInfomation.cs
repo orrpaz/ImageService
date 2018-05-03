@@ -44,14 +44,22 @@ namespace ImageService
 
         }
         public string ToJson()
-        { 
-            JObject jsonObject = new JObject {
-             new JProperty("handlerPaths", JsonConvert.SerializeObject(handlerPaths)),
-             new JProperty("outputDir", outputDir),
-             new JProperty("thumbnailSize", thumbnailSize),
-             new JProperty("logName", logName),
-             new JProperty("eventSourceName", eventSourceName)
-         };
+        {
+            //JObject jsonObject = new JObject {
+            //  new JProperty("handlerPaths", JsonConvert.SerializeObject(handlerPaths)),
+            //new JProperty("outputDir", outputDir),
+            //new JProperty("thumbnailSize", thumbnailSize),
+            // new JProperty("logName", logName),
+            //new JProperty("eventSourceName", eventSourceName)
+            //};
+            JObject jsonObject = new JObject();
+
+            jsonObject["handlerPaths"] = JsonConvert.SerializeObject(handlerPaths);
+            jsonObject["outputDir"] = outputDir;
+            jsonObject["thumbnailSize"] = thumbnailSize;
+            jsonObject["logName"] = logName;
+            jsonObject["eventSourceName"] = eventSourceName;
+             
             return jsonObject.ToString();
         }
 
