@@ -17,7 +17,7 @@ namespace ImageService
         private static ConfigInfomation configInfomation;
 
        // public JObject jsonObject { get; }
-       // public string json { get; }
+       // public string json { get; } 
         public string[] handlerPaths { get; }
         public string outputDir { get; }
         public string eventSourceName { get; }
