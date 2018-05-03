@@ -10,12 +10,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
 
 namespace ImageService.Server
 {
     public class ImageServer
     {
         #region Members
+        private const int port = 9999;
+        private TcpListener listener;
+        private IClientHandler ch;
         private IImageController m_controller;
         private ILoggingService m_logging;
         #endregion
@@ -82,6 +88,54 @@ namespace ImageService.Server
         public void SendCommand(CommandRecievedEventArgs e)
         {
             CommandRecieved?.Invoke(this, e);
+        }
+
+        public void Start()
+        {
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            listener = new TcpListener(ep);
+
+            listener.Start();
+            Console.WriteLine("Waiting for connections...");
+            Task task = new Task(() => {
+                while (true)
+                {
+                    try
+                    {
+                        TcpClient client = listener.AcceptTcpClient();
+                        Console.WriteLine("Got new connection");
+                        ch.HandleClient(client);
+                    }
+                    catch (SocketException)
+                    {
+                        break;
+                    }
+                }
+                Console.WriteLine("Server stopped");
+            });
+            task.Start();
+        }
+        public void Stop()
+        {
+            listener.Stop();
+        }
+    }
+
+    public void HandleClient(TcpClient client)
+        {
+            new Task(() =>
+            {
+                using (NetworkStream stream = client.GetStream())
+                using (StreamReader reader = new StreamReader(stream))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    string commandLine = reader.ReadLine();
+                    Console.WriteLine("Got command: {0}", commandLine);
+                    string result = ExecuteCommand(commandLine, client);
+                    writer.Write(result);
+                }
+                client.Close();
+            }).Start();
         }
     }
 }
