@@ -51,9 +51,8 @@ namespace ImageService
         [DllImport("advapi32.dll", SetLastError = true)] 
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
-        //Ex2
-        private IClientHandler ch;
-
+       
+        
         /// <summary>
         /// ImageService constructor.
         /// </summary>
@@ -61,14 +60,14 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-            info = ConfigInfomation.CreateConfigInfomation();
+            //info = ConfigInfomation.CreateConfigInfomation();
             // for APP.config
-            // string outputFolder = ConfigurationManager.AppSettings["OutputDir"];
-            //   int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
-            //  string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
-            //  string logName = ConfigurationManager.AppSettings["LogName"];
-            string eventSourceName = info.eventSourceName;
-            string logName = info.logName;
+            string outputFolder = ConfigurationManager.AppSettings["OutputDir"];
+            int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
+            string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
+            string logName = ConfigurationManager.AppSettings["LogName"];
+            //string eventSourceName = info.eventSourceName;
+            //string logName = info.logName;
             if (args.Count() > 0)
             {
                eventSourceName = args[0];
@@ -88,12 +87,8 @@ namespace ImageService
             // create LoggingService, ImageServiceModal, ImageController
             logging = new LoggingService();
             logging.MessageRecieved += eventLog1_EntryWritten;
-            modal = new ImageServiceModal(info.outputDir, info.thumbnailSize);
+            modal = new ImageServiceModal(outputFolder, thumbnailSize);
             controller = new ImageController(modal);
-            ch = new ClientHandler(controller);
-
-
-
         }
         /// <summary>
         /// OnStart function.
@@ -111,7 +106,10 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            m_imageServer = new ImageServer(controller, logging, info.handlerPaths);
+            //Run the image server, so it will listen for income-clients
+            m_imageServer = new ImageServer(controller, logging);
+            m_imageServer.Start();
+
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 60000; // 60 seconds  
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
