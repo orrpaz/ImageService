@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using ImageService.Server;
-
 using ImageService.Controller;
 using ImageService.Logging;
 using System.Configuration;
@@ -107,7 +106,7 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            m_imageServer = new ImageServer(controller, logging, info.handlerPaths);
+            m_imageServer = new ImageServer(controller, logging,  );
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 60000; // 60 seconds  
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);

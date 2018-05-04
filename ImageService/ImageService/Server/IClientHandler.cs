@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 
-namespace ImageService.ImageService.Server
+namespace sImageService.Server
 {
     public interface IClientHandler
     {

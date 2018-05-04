@@ -1,4 +1,5 @@
 ﻿using ImageService.Controller;
+using sImageService.Server;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageService.ImageService.Server
+namespace ImageService.Server
 {
     class ClientHandler : IClientHandler
     {
@@ -30,9 +31,9 @@ namespace ImageService.ImageService.Server
                     Console.WriteLine("Got command: {0}", commandLine);
 
                     //לשנות בהתאם לפורמט שכתבנו לקבלת פקודה
-                    string result = m_controller.ExecuteCommand((int) commandLine, )
+                   // string result = m_controller.ExecuteCommand((int)commandLine, )
 //                    string result = ExecuteCommand(commandLine, client);
-                    writer.Write(result);
+                 //    writer.Write(result);
                 }
                 client.Close();
             }).Start();

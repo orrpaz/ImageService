@@ -13,6 +13,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using sImageService.Server;
 
 namespace ImageService.Server
 {
