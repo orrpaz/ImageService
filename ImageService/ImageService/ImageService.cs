@@ -51,6 +51,9 @@ namespace ImageService
         [DllImport("advapi32.dll", SetLastError = true)] 
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
+        //Ex2
+        private IClientHandler ch;
+
         /// <summary>
         /// ImageService constructor.
         /// </summary>
@@ -87,6 +90,7 @@ namespace ImageService
             logging.MessageRecieved += eventLog1_EntryWritten;
             modal = new ImageServiceModal(info.outputDir, info.thumbnailSize);
             controller = new ImageController(modal);
+            ch = new ClientHandler(controller);
 
 
 

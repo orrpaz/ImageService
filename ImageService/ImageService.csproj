@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageService\Commands\GetConfigCommand.cs" />
+    <Compile Include="ImageService\Communtication\TCPServer.cs" />
     <Compile Include="ImageService\ConfigInfomation.cs" />
     <Compile Include="ImageService\ImageService.cs">
       <SubType>Component</SubType>
@@ -78,8 +79,8 @@
     <Compile Include="ImageService\Modal\Event\DirectoryCloseEventArgs.cs" />
     <Compile Include="ImageService\Modal\IImageServiceModal.cs" />
     <Compile Include="ImageService\Modal\ImageServiceModal.cs" />
-    <Compile Include="ImageService\Server\ClientHandler.cs" />
-    <Compile Include="ImageService\Server\IClientHandler.cs" />
+    <Compile Include="ImageService\Communtication\ClientHandler.cs" />
+    <Compile Include="ImageService\Communtication\IClientHandler.cs" />
     <Compile Include="ImageService\Server\ImageServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">

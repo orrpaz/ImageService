@@ -19,9 +19,9 @@ namespace ImageService.Server
     public class ImageServer
     {
         #region Members
-        private const int port = 9999;
-        private TcpListener listener;
-        private IClientHandler ch;
+        //private const int port = 9999;
+        //private TcpListener listener;
+        //private IClientHandler ch;
         private IImageController m_controller;
         private ILoggingService m_logging;
         #endregion
@@ -90,35 +90,35 @@ namespace ImageService.Server
             CommandRecieved?.Invoke(this, e);
         }
 
-        public void Start()
-        {
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
-            listener = new TcpListener(ep);
+        //public void Start()
+        //{
+        //    IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+        //    listener = new TcpListener(ep);
 
-            listener.Start();
-            Console.WriteLine("Waiting for connections...");
-            Task task = new Task(() =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        TcpClient client = listener.AcceptTcpClient();
-                        Console.WriteLine("Got new connection");
-                        ch.HandleClient(client);
-                    }
-                    catch (SocketException)
-                    {
-                        break;
-                    }
-                }
-                Console.WriteLine("Server stopped");
-            });
-            task.Start();
-        }
-        public void Stop()
-        {
-            listener.Stop();
-        }
+        //    listener.Start();
+        //    Console.WriteLine("Waiting for connections...");
+        //    Task task = new Task(() =>
+        //    {
+        //        while (true)
+        //        {
+        //            try
+        //            {
+        //                TcpClient client = listener.AcceptTcpClient();
+        //                Console.WriteLine("Got new connection");
+        //                ch.HandleClient(client);
+        //            }
+        //            catch (SocketException)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //        Console.WriteLine("Server stopped");
+        //    });
+        //    task.Start();
+        //}
+        //public void Stop()
+        //{
+        //    listener.Stop();
+        //}
     }
 }
