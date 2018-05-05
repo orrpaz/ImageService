@@ -32,7 +32,7 @@ namespace ImageServiceGUI.Communication
 
                     Console.WriteLine($"Send 'Amir' to Server");
                     //writer.AutoFlush = true;
-                    writer.Write("Amir");
+                    writer.Write("GetConfig");
                     Console.WriteLine("\n After write");
                     // Get result from server
                     string result2 = reader.ReadString();

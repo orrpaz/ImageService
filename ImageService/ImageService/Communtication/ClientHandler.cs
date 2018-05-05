@@ -13,34 +13,46 @@ namespace ImageService.Server
 {
     class ClientHandler : IClientHandler
     {
-        private IImageController m_controller;
         private ILoggingService m_logging;
-        public ClientHandler(IImageController controler, ILoggingService log)
+        private IImageController m_controller;
+        private List<TcpClient> m_activeClients;
+
+
+        public ClientHandler(IImageController controler, ILoggingService logging)
         {
+            m_logging = logging;
             m_controller = controler;
-            m_logging = log;
+            m_activeClients = new List<TcpClient>();
         }
 
         public void HandleClient(TcpClient client)
         {
-            m_logging.Log("In client handler", MessageTypeEnum.INFO);
+            bool clientConnect = true;
+
             new Task(() =>
             {
-                using (NetworkStream stream = client.GetStream())
-                using (StreamReader reader = new StreamReader(stream))
-                using (StreamWriter writer = new StreamWriter(stream))
+                m_activeClients.Add(client);
+                while (clientConnect)
                 {
-                    m_logging.Log("Check 2", MessageTypeEnum.INFO);
-                    string commandLine = reader.ReadLine();
-                    Console.WriteLine("Got command: {0}", commandLine);
-                    m_logging.Log("Got command", MessageTypeEnum.INFO);
-                    m_logging.Log(commandLine, MessageTypeEnum.INFO);
-                    //לשנות בהתאם לפורמט שכתבנו לקבלת פקודה
-                    //string result = m_controller.ExecuteCommand((int)commandLine, null);
-                    //                    string result = ExecuteCommand(commandLine, cl ient);
-                    writer.Write("I got");
+
+
+                    using (NetworkStream stream = client.GetStream())
+                    using (BinaryReader reader = new BinaryReader(stream))
+                    using (BinaryWriter writer = new BinaryWriter(stream))
+                    {
+                        m_logging.Log("waiting to client..", MessageTypeEnum.INFO);
+                        string commandLine = reader.ReadString();
+                        Console.WriteLine("Got command: {0}", commandLine);
+                        m_logging.Log("ok " + commandLine, MessageTypeEnum.INFO);
+
+                        //לשנות בהתאם לפורמט שכתבנו לקבלת פקודה
+                        //string result = m_controller.ExecuteCommand((int)commandLine, null);
+                        //                    string result = ExecuteCommand(commandLine, cl ient);
+                        writer.Write("i got");
+                    }
                 }
                 client.Close();
+                m_activeClients.Remove(client);
             }).Start();
         }
     }
