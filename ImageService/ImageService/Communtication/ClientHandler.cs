@@ -27,12 +27,12 @@ namespace ImageService.Server
 
         public void HandleClient(TcpClient client)
         {
-            bool clientConnect = true;
+           // bool clientConnect = true;
 
             new Task(() =>
             {
                 m_activeClients.Add(client);
-                while (clientConnect)
+             //   while (clientConnect)
                 {
 
 
@@ -48,7 +48,7 @@ namespace ImageService.Server
                         //לשנות בהתאם לפורמט שכתבנו לקבלת פקודה
                         //string result = m_controller.ExecuteCommand((int)commandLine, null);
                         //                    string result = ExecuteCommand(commandLine, cl ient);
-                        writer.Write("i got");
+                        writer.Write("i got" + commandLine);
                     }
                 }
                 client.Close();
