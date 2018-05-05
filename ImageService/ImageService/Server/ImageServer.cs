@@ -21,8 +21,8 @@ namespace ImageService.Server
     {
         #region Members
         private const int port = 9999;
-        private TcpListener listener;
-        private IClientHandler ch;
+        private TcpListener m_listener;
+        private IClientHandler m_ch;
         private IImageController m_controller;
         private ILoggingService m_logging;
         #endregion
@@ -36,12 +36,13 @@ namespace ImageService.Server
         /// </summary>
         /// <param name="controller">controller</param>
         /// <param name="logging">logger</param>
-        public ImageServer(IImageController controller, ILoggingService logging, string[] directories)
+        public ImageServer(IImageController controller, ILoggingService logging)
         {
             m_controller = controller;
             m_logging = logging;
+            m_ch = new ClientHandler(m_controller);
             // read from App config and put handlers in array of string.
-            // string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
+             string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
             foreach (string directoryPath in directories)
             {
                 // create handler for each path. 
@@ -79,6 +80,8 @@ namespace ImageService.Server
         /// </summary>
         public void CloseServer()
         {
+            //Stop the listening
+            Stop();
             SendCommand(new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null));
         }
 
@@ -93,33 +96,40 @@ namespace ImageService.Server
 
         public void Start()
         {
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
-            listener = new TcpListener(ep);
+            Console.WriteLine("IN IMAGE SERVER");
 
-            listener.Start();
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            m_listener = new TcpListener(ep);
+
+            m_listener.Start();
             Console.WriteLine("Waiting for connections...");
+            m_logging.Log("Waiting for connections...", MessageTypeEnum.INFO);
+
             Task task = new Task(() =>
             {
                 while (true)
                 {
                     try
                     {
-                        TcpClient client = listener.AcceptTcpClient();
+                        TcpClient client = m_listener.AcceptTcpClient();
                         Console.WriteLine("Got new connection");
-                        ch.HandleClient(client);
+                        m_logging.Log("Got new connection!", MessageTypeEnum.INFO);
+                        m_ch.HandleClient(client);
                     }
                     catch (SocketException)
                     {
+                        m_logging.Log("Fail to establish new conection", MessageTypeEnum.FAIL);
                         break;
                     }
                 }
                 Console.WriteLine("Server stopped");
+                m_logging.Log("Server stopped", MessageTypeEnum.INFO);
             });
             task.Start();
         }
         public void Stop()
         {
-            listener.Stop();
+            m_listener.Stop();
         }
     }
 }

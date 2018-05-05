@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageServiceGUI.Communication;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +10,18 @@ namespace ImageServiceGUI.Model
 {
     class SettingModel : ISettingModel
     {
+
+        public SettingModel()
+        {
+            Console.WriteLine("Check1");
+            Communicator c = new Communicator();
+            c.StartConnection();
+        }
+
+        private string outputDirectory;
+        private string sourceName;
+        private string logName;
+        private int thumbnailSize;
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string name)
@@ -17,10 +30,7 @@ namespace ImageServiceGUI.Model
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
 
-        private string outputDirectory;
-        private string sourceName;
-        private string logName;
-        private int thumbnailSize;
+        
 
         public string OutputDirectory
         {

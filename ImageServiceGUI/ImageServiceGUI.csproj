@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Communication\Communicator.cs" />
     <Compile Include="Communication\SIComm.cs" />
     <Compile Include="Model\SettingModel.cs" />
     <Compile Include="ViewModel\VMSetting.cs" />
