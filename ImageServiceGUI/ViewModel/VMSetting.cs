@@ -6,11 +6,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ImageServiceGUI.ViewModel
 {
     class VMSetting : INotifyPropertyChanged
     {
+        private string selectedItem;
         private SettingModel settingModel;
         private ObservableCollection<string> handlers { get; set; }
 
@@ -56,7 +58,17 @@ namespace ImageServiceGUI.ViewModel
             get { return settingModel.ThumbnailSize; }
         }
 
-      
+        public ICommand RemoveCommand { get; private set; }
+        public string selected {
+            set
+            {
+                selectedItem = value;
+                NotifyPropertyChanged("selected");
+            }
+            get { return selectedItem; }
+        }
+
+
 
 
     }
