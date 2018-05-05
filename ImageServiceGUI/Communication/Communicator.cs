@@ -12,7 +12,7 @@ namespace ImageServiceGUI.Communication
     class Communicator
     {
         private TcpClient m_client;
-        private const int port = 9999;
+        private const int port = 8000;
 
         public void StartConnection()
         {
@@ -29,6 +29,16 @@ namespace ImageServiceGUI.Communication
             {
                 // Send data to server
                 Console.Write("Please enter a number: ");
+
+                    Console.WriteLine($"Send 'Amir' to Server");
+                    //writer.AutoFlush = true;
+                    writer.Write("Amir");
+                    Console.WriteLine("\n After write");
+                    // Get result from server
+                    string result2 = reader.ReadString();
+                    Console.WriteLine("Check00");
+                    Console.WriteLine(result2);
+
                     Console.WriteLine("Check0");
                     int num = int.Parse(Console.ReadLine());
                     Console.WriteLine("Check 2");
@@ -45,7 +55,8 @@ namespace ImageServiceGUI.Communication
                 Console.WriteLine(e.Message);
                 Console.WriteLine("blabla");
             }
-
+
+
         }
 
     }

@@ -19,7 +19,7 @@ namespace ImageService.Server
     public class ImageServer
     {
         #region Members
-        private const int port = 9999;
+        private const int port = 8000;
         private TcpListener m_listener;
         private IClientHandler m_ch;
         private IImageController m_controller;
@@ -39,7 +39,7 @@ namespace ImageService.Server
         {
             m_controller = controller;
             m_logging = logging;
-            m_ch = new ClientHandler(m_controller);
+            m_ch = new ClientHandler(m_controller, m_logging);
             // read from App config and put handlers in array of string.
              string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
             foreach (string directoryPath in directories)
