@@ -40,13 +40,13 @@ namespace ImageServiceGUI.Communication
                     Console.WriteLine(result2);
 
                     Console.WriteLine("Check0");
-                    int num = int.Parse(Console.ReadLine());
+                   // int num = int.Parse(Console.ReadLine());
                     Console.WriteLine("Check 2");
-                writer.Write(num);
+                //writer.Write(num);
                     Console.WriteLine("Check3");
                     // Get result from server
-                    int result = reader.ReadInt32();
-                Console.WriteLine("Result = {0}", result);
+                   // int result = reader.ReadInt32();
+               // Console.WriteLine("Result = {0}", result);
             }
             m_client.Close();
             }

@@ -11,9 +11,15 @@ namespace ImageService.Commands
     {
         public string Execute(string[] args, out bool result)
         {
-            ConfigInfomation info = ConfigInfomation.CreateConfigInfomation();
+            try { 
+            ConfigInfomation info = ConfigInfomation.Create();
             result = true;
             return info.ToJson();
+            } catch (Exception ex)
+            {
+                result = false;
+                return "Couldn't get the config information";
+            }
         }
     } 
 }

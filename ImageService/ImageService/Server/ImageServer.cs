@@ -129,7 +129,11 @@ namespace ImageService.Server
         }
         public void Stop()
         {
-            m_listener.Stop();
+            try
+            {
+                m_listener.Stop();
+            }
+            catch { }
         }
     }
 }
