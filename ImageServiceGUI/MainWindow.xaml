@@ -13,7 +13,9 @@
             <TabItem Header="Settings">
                 <views:ViewSetting/>
             </TabItem>
-            <TabItem Header="Log" />
+            <TabItem Header="Log">
+                <views:LogView/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ImageService</RootNamespace>
     <AssemblyName>ImageService</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -112,6 +113,7 @@
     <Content Include="obj\Debug\ImageService.pdb" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="bin\Debug\ImageService.exe.config" />
     <None Include="bin\Debug\ImageService.InstallLog" />
     <None Include="bin\Debug\ImageService.vshost.exe.config" />

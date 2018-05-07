@@ -1,4 +1,7 @@
-﻿using ImageServiceGUI.Model;
+﻿using ImageService.Infrastructure.Enums;
+using ImageService.Modal;
+using ImageServiceGUI.Model;
+using Microsoft.Practices.Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,7 +36,7 @@ namespace ImageServiceGUI.ViewModel
             delegate (Object sender, PropertyChangedEventArgs e) {
             NotifyPropertyChanged("VM_"+e.PropertyName);
       };
-
+           RemoveCommand = new DelegateCommand<object>(this.OnRemove);
             // continue..
         }
 
@@ -69,6 +72,20 @@ namespace ImageServiceGUI.ViewModel
         }
 
 
+        private void OnRemove(object obj)
+        {
+            try
+            {
+                string[] arr = { this.selectedItem };
+                //CommandRecievedEventArgs eventArgs = new CommandRecievedEventArgs((int)CommandEnum.CloseHandler, arr, "");
+              
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
 
 
     }
