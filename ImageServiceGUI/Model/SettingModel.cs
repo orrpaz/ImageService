@@ -1,4 +1,5 @@
 ﻿using ImageServiceGUI.Communication;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -68,8 +69,6 @@ namespace ImageServiceGUI.Model
             }
             get { return thumbnailSize; }
         }
-
-
 
 
     }

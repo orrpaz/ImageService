@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using System;
 using System.Text.RegularExpressions;
 using System.IO;
-using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
-using ImageService.Infrastructure;
+using Infasructure;
 using ImageService.Logging.Modal;
 
 namespace ImageService.Controller.Handlers

@@ -1,7 +1,8 @@
-﻿using ImageService.Infrastructure.Enums;
-using ImageService.Modal;
+﻿using ImageService.Modal;
 using ImageServiceGUI.Model;
+using Infasructure;
 using Microsoft.Practices.Prism.Commands;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -77,15 +78,17 @@ namespace ImageServiceGUI.ViewModel
             try
             {
                 string[] arr = { this.selectedItem };
-                //CommandRecievedEventArgs eventArgs = new CommandRecievedEventArgs((int)CommandEnum.CloseHandler, arr, "");
+                CommandRecievedEventArgs eventArgs = new CommandRecievedEventArgs((int)CommandEnum.CloseHandler, arr, "");
               
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
             }
 
         }
+
+      
 
 
     }

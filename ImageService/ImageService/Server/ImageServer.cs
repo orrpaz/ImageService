@@ -1,6 +1,5 @@
 ﻿using ImageService.Controller;
 using ImageService.Controller.Handlers;
-using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
 using ImageService.Logging.Modal;
 using ImageService.Modal;
@@ -14,6 +13,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using ImageService.Server;
+using Infasructure;
 
 namespace ImageService.Server
 {
@@ -36,13 +36,13 @@ namespace ImageService.Server
         /// </summary>
         /// <param name="controller">controller</param>
         /// <param name="logging">logger</param>
-        public ImageServer(IImageController controller, ILoggingService logging)
+        public ImageServer(IImageController controller, ILoggingService logging, string[] directories)
         {
             m_controller = controller;
             m_logging = logging;
             m_ch = new ClientHandler(m_controller, m_logging);
             // read from App config and put handlers in array of string.
-             string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
+            // string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
             foreach (string directoryPath in directories)
             {
                 // create handler for each path. 

@@ -15,7 +15,7 @@ namespace ImageService.Commands
             ConfigInfomation info = ConfigInfomation.Create();
             result = true;
             return info.ToJson();
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 result = false;
                 return "Couldn't get the config information";

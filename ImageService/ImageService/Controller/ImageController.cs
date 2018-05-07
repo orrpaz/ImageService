@@ -1,7 +1,6 @@
 ﻿using ImageService.Commands;
-using ImageService.Infrastructure;
-using ImageService.Infrastructure.Enums;
 using ImageService.Modal;
+using Infasructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
