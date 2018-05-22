@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ImageServiceGUI.Views"
+             xmlns:brushConvertors="clr-namespace:ImageServiceGUI.Theme"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <brushConvertors:TypesColorConvertor x:Key="ColorType"/>
+    </UserControl.Resources>
     <Grid>
         <!--#region Grid Set-up-->
         <Grid.ColumnDefinitions>
@@ -18,17 +22,17 @@
         <!--#endregion-->
         <StackPanel>
             <Label Content="Log" FontSize="25" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Blue" RenderTransformOrigin="2.634,0.921"/>
-            <DataGrid Grid.Row="2" ItemsSource="{Binding LogList}" CanUserResizeColumns="False" IsReadOnly="True" CanUserReorderColumns="False"
+            <DataGrid Grid.Row="2" ItemsSource="{Binding VM_AllLogs}"  VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False" IsReadOnly="True" CanUserReorderColumns="False"
                   CanUserSortColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" FontWeight="Bold">
+                    <DataGridTextColumn Header="Type" Binding="{Binding logType}" FontWeight="Bold" IsReadOnly="True" >
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Background" Value="{Binding Color}" />
+                                <Setter Property="Background" Value="{Binding logType, Converter={StaticResource ColorType}}" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="1*" />
+                    <DataGridTextColumn Header="Message" Binding="{Binding logInfo}" Width="1*" IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
 

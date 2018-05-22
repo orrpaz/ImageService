@@ -7,8 +7,9 @@
         xmlns:views="clr-namespace:ImageServiceGUI.Views"
 
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" Background="{Binding VM_Connected}">
     <Grid>
+        
         <TabControl>
             <TabItem Header="Settings">
                 <views:ViewSetting/>

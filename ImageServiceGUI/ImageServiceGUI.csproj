@@ -64,9 +64,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communication\Communicator.cs" />
-    <Compile Include="Communication\SIComm.cs" />
+    <Compile Include="Model\IMainWindowModel.cs" />
+    <Compile Include="Model\LogModel.cs" />
+    <Compile Include="Model\ILogModel.cs" />
+    <Compile Include="Model\MainWindowModel.cs" />
     <Compile Include="Model\SettingModel.cs" />
+    <Compile Include="Theme\TypesColorConvertor.cs" />
+    <Compile Include="ViewModel\IVMLog.cs" />
+    <Compile Include="ViewModel\IVMMainWindow.cs" />
+    <Compile Include="ViewModel\IVMSetting.cs" />
     <Compile Include="ViewModel\VMLog.cs" />
+    <Compile Include="ViewModel\VMMainWindow.cs" />
     <Compile Include="ViewModel\VMSetting.cs" />
     <Compile Include="Views\LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>

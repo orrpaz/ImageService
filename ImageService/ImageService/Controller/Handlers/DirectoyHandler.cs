@@ -7,8 +7,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.IO;
 using ImageService.Logging;
-using Infasructure;
-using ImageService.Logging.Modal;
+using Infrastructure.Enum;
 
 namespace ImageService.Controller.Handlers
 {
@@ -50,9 +49,6 @@ namespace ImageService.Controller.Handlers
             try {
                 // create FileSystemWatcher to handle.
                 m_dirWatcher = new FileSystemWatcher(m_path);
-                //m_dirWatcher.Path = m_path;
-                //m_dirWatcher.Filter = "*";
-                // m_dirWatcher.Changed += new FileSystemEventHandler(OnChange);
                 m_dirWatcher.Created += new FileSystemEventHandler(OnChange);
                 m_dirWatcher.EnableRaisingEvents = true;
 
@@ -71,26 +67,30 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">event args</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            m_logging.Log("On Command Recieved", MessageTypeEnum.INFO);
+            //Check if path is handler's path (or local)
+            if (e.RequestDirPath == this.m_path || e.RequestDirPath.Equals("*"))
             {
-                bool isSuccess;
                 if (e.CommandID == (int)CommandEnum.CloseCommand)
                 {
-                    m_logging.Log("Close command execute in handler", MessageTypeEnum.INFO);
+                    m_logging.Log("Close command execute in handler. Path: " + m_path, MessageTypeEnum.INFO);
                     closeHandler();
                     return;
                 }
-
-                if (e.RequestDirPath.Equals(this.m_path))
+                bool isSuccess;
+                if (e.CommandID == (int)CommandEnum.NewFileCommand)
                 {
-                    string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out isSuccess);
-                    if (isSuccess)
+                    if (e.RequestDirPath.Equals(this.m_path))
                     {
-                        m_logging.Log(msg, MessageTypeEnum.INFO);
-                    }
-                    else
-                    {
-                        m_logging.Log("Error on execute command: " + msg, MessageTypeEnum.FAIL);
+                        string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out isSuccess);
+                        if (isSuccess)
+                        {
+                          //  m_logging.Log("blablablablaaaaaaa", MessageTypeEnum.INFO);
+                            m_logging.Log(msg, MessageTypeEnum.INFO);
+                        }
+                        else
+                        {
+                            m_logging.Log("Error on execute command: " + msg, MessageTypeEnum.FAIL);
+                        }
                     }
                 }
             }

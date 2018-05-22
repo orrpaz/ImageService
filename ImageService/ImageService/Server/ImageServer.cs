@@ -13,7 +13,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using ImageService.Server;
-using Infasructure;
+using Infrastructure.Enum;
+using ImageService.Communtication;
 
 namespace ImageService.Server
 {
@@ -25,6 +26,8 @@ namespace ImageService.Server
         private IClientHandler m_ch;
         private IImageController m_controller;
         private ILoggingService m_logging;
+        private ICurrentRunLog m_currentLog;
+        private ITCPServer m_tcpserver;
         #endregion
 
         #region Properties
@@ -36,18 +39,23 @@ namespace ImageService.Server
         /// </summary>
         /// <param name="controller">controller</param>
         /// <param name="logging">logger</param>
-        public ImageServer(IImageController controller, ILoggingService logging, string[] directories)
+        public ImageServer(IImageController controller, ILoggingService logging, ICurrentRunLog currentLog)
         {
             m_controller = controller;
             m_logging = logging;
+            m_currentLog = currentLog;
             m_ch = new ClientHandler(m_controller, m_logging);
+            m_tcpserver = new TCPServer(port, m_ch, m_logging);
             // read from App config and put handlers in array of string.
             // string[] directories = ConfigurationManager.AppSettings.Get("Handler").Split(';');
-            foreach (string directoryPath in directories)
+            foreach (string directoryPath in ConfigInfomation.Instance.handlerPaths)
             {
                 // create handler for each path. 
                 CreateHandler(directoryPath);
             }
+            m_controller.SpecialCommanndAppeared += SendCommand;
+           // m_controller.SpecialCommanndAppeared += PassLog;
+            m_logging.MessageRecieved += m_ch.UpdateClientsNewLog;
         }
 
         /// <summary>
@@ -81,59 +89,42 @@ namespace ImageService.Server
         public void CloseServer()
         {
             //Stop the listening
-            Stop();
-            SendCommand(new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null));
+            //Stop();
+            //SendCommand(new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null));
         }
 
         /// <summary>
         ///  this method send command to all handlers by event.
         /// </summary>
         /// <param name="e">args for the event</param>
-        public void SendCommand(CommandRecievedEventArgs e)
+        public void SendCommand(object sender, CommandRecievedEventArgs e)
         {
-            CommandRecieved?.Invoke(this, e);
+            //m_logging.Log("In The Send Command AAAAA", MessageTypeEnum.INFO);
+            CommandRecieved?.Invoke(sender, e);
+        }
+        /// <summary>
+        ///  Not in use right now. Avaliable for future to pass log by event
+        /// </summary>
+        /// <param name="e">args for the event</param>
+        public void PassLog(object sender, CommandRecievedEventArgs e)
+        {
+            m_ch.SendToClient(m_currentLog.GetCurrentRunLog, e);
         }
 
+        /// <summary>
+        ///  Starts listen to incoming clients
+        /// </summary>
         public void Start()
         {
-            Console.WriteLine("IN IMAGE SERVER");
 
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
-            m_listener = new TcpListener(ep);
-
-            m_listener.Start();
-            Console.WriteLine("Waiting for connections...");
-            m_logging.Log("Waiting for connections...", MessageTypeEnum.INFO);
-
-            Task task = new Task(() =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        TcpClient client = m_listener.AcceptTcpClient();
-                        Console.WriteLine("Got new connection");
-                        m_logging.Log("Got new connection!", MessageTypeEnum.INFO);
-                        m_ch.HandleClient(client);
-                    }
-                    catch (SocketException)
-                    {
-                        m_logging.Log("Fail to establish new conection", MessageTypeEnum.FAIL);
-                        break;
-                    }
-                }
-                Console.WriteLine("Server stopped");
-                m_logging.Log("Server stopped", MessageTypeEnum.INFO);
-            });
-            task.Start();
+            m_tcpserver.Start();
         }
+        /// <summary>
+        ///  Stop listen to incoming clients
+        /// </summary>
         public void Stop()
         {
-            try
-            {
-                m_listener.Stop();
-            }
-            catch { }
+            m_tcpserver.Stop();
         }
     }
 }

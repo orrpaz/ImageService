@@ -13,18 +13,20 @@ namespace ImageService
     class ConfigInfomation
     {
 
-        private static ConfigInfomation configInfomation;
+        private static ConfigInfomation instance;
+        
         // public JObject jsonObject { get; }
         // public string json { get; }
-        public string[] handlerPaths { get; }
+        public List<string> handlerPaths { get; private set; }
         public string outputDir { get; }
         public string eventSourceName { get; }
         public string logName { get; }
         public int thumbnailSize { get; }
+        public int currentEntry { get; private set; }
 
         private ConfigInfomation()
         {
-            handlerPaths = ConfigurationManager.AppSettings["Handler"].Split(';');
+            handlerPaths = new List<string>(ConfigurationManager.AppSettings["Handler"].Split(';'));
             outputDir = ConfigurationManager.AppSettings["OutputDir"];
             thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
             logName = ConfigurationManager.AppSettings["LogName"];
@@ -37,6 +39,18 @@ namespace ImageService
             //   jsonObject.eventSourceName = eventSourceName;
         }
 
+
+        public static ConfigInfomation Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ConfigInfomation();
+                }
+                return instance;
+            }
+        }
         public string ToJson()
         {
             //JObject jsonObject = new JObject {
@@ -53,17 +67,23 @@ namespace ImageService
             jsonObject["thumbnailSize"] = thumbnailSize;
             jsonObject["logName"] = logName;
             jsonObject["eventSourceName"] = eventSourceName;
-             
+
             return jsonObject.ToString();
         }
-
-        public static ConfigInfomation Create()
+        public void RemoveHandlers(string toRemove)
         {
-            if (configInfomation == null)
+            foreach(string path in handlerPaths)
             {
-                configInfomation = new ConfigInfomation();
+                if (path.Equals(toRemove))
+                {
+                    handlerPaths.Remove(toRemove);
+                    break;
+                }
             }
-            return configInfomation;
+        }
+        public void setNumOfEntrys(int num)
+        {
+            currentEntry = num;
         }
     }
    

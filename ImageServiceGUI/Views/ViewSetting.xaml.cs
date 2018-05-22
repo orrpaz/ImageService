@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 namespace ImageServiceGUI.Views
 {
     /// <summary>
-    /// Interaction logic for ViewSetting.xaml
+    /// Set the data context of ViewSetting.xaml
     /// </summary>
     public partial class ViewSetting : UserControl
     {
@@ -26,7 +26,7 @@ namespace ImageServiceGUI.Views
         {
             InitializeComponent();
             vm = new VMSetting();
-            this.DataContext = vm;
+            DataContext = vm;
         }
     }
 }

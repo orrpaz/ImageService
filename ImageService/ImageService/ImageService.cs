@@ -15,6 +15,8 @@ using ImageService.Logging;
 using System.Configuration;
 using ImageService.Modal;
 using ImageService.Logging.Modal;
+using ImageService.Commands;
+using Infrastructure.Enum;
 
 namespace ImageService
 {
@@ -47,6 +49,7 @@ namespace ImageService
         private IImageServiceModal modal;
         private IImageController controller;
         private ILoggingService logging;
+        private ICurrentRunLog m_currentLog;
         private int eventId = 1;
         [DllImport("advapi32.dll", SetLastError = true)] 
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
@@ -60,7 +63,7 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-            info = ConfigInfomation.Create();
+            info = ConfigInfomation.Instance;
             // for APP.config
            // string outputFolder = ConfigurationManager.AppSettings["OutputDir"];
             //int thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
@@ -68,14 +71,16 @@ namespace ImageService
            // string logName = ConfigurationManager.AppSettings["LogName"];
             string eventSourceName = info.eventSourceName;
             string logName = info.logName;
-            if (args.Count() > 0)
-            {
-               eventSourceName = args[0];
-            }
-            if (args.Count() > 1)
-            {
-                logName = args[1];
-            }
+
+            //Change to insert params (if exist)
+            //if (args.Count() > 0)
+            //{
+            //   eventSourceName = args[0];
+            //}
+            //if (args.Count() > 1)
+            //{
+            //    logName = args[1];
+            //}
             eventLog1 = new System.Diagnostics.EventLog();
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
@@ -83,12 +88,21 @@ namespace ImageService
             }
             eventLog1.Source = eventSourceName;
             eventLog1.Log = logName;
-
-            // create LoggingService, ImageServiceModal, ImageController
+            eventLog1.Clear();
+            int a = eventLog1.Entries.Count;
+            //eventLog1.WriteEntry("Num of entries: " + a, EventLogEntryType.Information, eventId++);
+            //eventLog1.WriteEntry("eventId: " + eventId, EventLogEntryType.Information, eventId++);
+            
+            // create LoggingService, CurrentRunLog, ImageServiceModal, ImageController
+            m_currentLog = new CurrentRunLog();
             logging = new LoggingService();
-            logging.MessageRecieved += eventLog1_EntryWritten;
-            modal = new ImageServiceModal(ConfigInfomation.Create().outputDir, ConfigInfomation.Create().thumbnailSize);
+            logging.MessageRecieved += m_currentLog.AddToLog; //Write log in CurrentRunLog
+            logging.MessageRecieved += eventLog1_EntryWritten; //Write log in entry
+            
+            modal = new ImageServiceModal(ConfigInfomation.Instance.outputDir, ConfigInfomation.Instance.thumbnailSize);
             controller = new ImageController(modal);
+            //Adding new option of LogCommand
+            controller.insertCommand((int)CommandEnum.LogCommand, new GetCurrentRunLogCommand(m_currentLog));
         }
         /// <summary>
         /// OnStart function.
@@ -97,7 +111,7 @@ namespace ImageService
         /// <param name="args">command line args</param>
         protected override void OnStart(string[] args)
         {
-            eventLog1.WriteEntry("In OnStart");
+            logging.Log("In OnStart", MessageTypeEnum.INFO);
             // Set up a timer to trigger every minute.  
            
             // Update the service state to Start Pending.  
@@ -107,7 +121,7 @@ namespace ImageService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             //Run the image server, so it will listen for income-clients
-            m_imageServer = new ImageServer(controller, logging ,ConfigInfomation.Create().handlerPaths);
+            m_imageServer = new ImageServer(controller, logging, m_currentLog);
             m_imageServer.Start();
 
             System.Timers.Timer timer = new System.Timers.Timer();
@@ -130,7 +144,7 @@ namespace ImageService
         /// </summary>
         protected override void OnStop()
         {
-            eventLog1.WriteEntry("In onStop.");
+            logging.Log("In onStop.", MessageTypeEnum.INFO);
             ServiceStatus serviceStatus = new ServiceStatus();
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOP_PENDING;
             serviceStatus.dwWaitHint = 100000;
@@ -173,7 +187,8 @@ namespace ImageService
                     type = EventLogEntryType.Information;
                     break;
             }
-            eventLog1.WriteEntry(e.Message, type);
+            string str = e.Status.ToString() +  "  " + e.Message;
+            eventLog1.WriteEntry(str, type);
         }
     }
 }

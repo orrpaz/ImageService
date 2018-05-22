@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -38,13 +39,26 @@ namespace ImageService.Modal
         /// <returns>return the date that image was taken.</returns>
         public static DateTime GetDateTakenFromImage(string path)
         {
-            using (Image myImage = Image.FromFile(path))
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (Image myImage = Image.FromStream(fs, false, false))
             {
-                PropertyItem propItem = myImage.GetPropertyItem(36867);
-                string dateTaken = new Regex(":").Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                return DateTime.Parse(dateTaken);
+                PropertyItem propItem = null;
+                try
+                {
+                    propItem = myImage.GetPropertyItem(36867);
+                }
+                catch { }
+                if (propItem != null)
+                {
+                    string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                    return DateTime.Parse(dateTaken);
+                }
+                else
+                    return new FileInfo(path).LastWriteTime;
+
             }
         }
+
 
         /// <summary>
         /// this method check for the existence of files with tempFileName and increment
@@ -53,14 +67,14 @@ namespace ImageService.Modal
         /// <param name="path">The Path of the Image from the file</param>
         /// <param name="target">The target Path of the Image</param>
         /// <returns>new full path of Image.</returns>
-        public string CheckIfExists(string path,string target)
+        public string CheckIfExists(string path, string target)
         {
             int count = 1;
 
             string fileNameOnly = Path.GetFileNameWithoutExtension(path);
             string extension = Path.GetExtension(path);
             // string directoryPath = Path.GetDirectoryName(path);
-             string newFullPath = fileNameOnly + extension;
+            string newFullPath = fileNameOnly + extension;
 
             while (File.Exists(target + newFullPath))
             {
@@ -69,23 +83,28 @@ namespace ImageService.Modal
             }
             return newFullPath;
         }
-        
+        /// <summary>
+        /// In interface
+        /// </summary>
+        /// <param name="path">path</param>
+        /// <param name="result">result</param>
+
         public string AddFile(string path, out bool result)
         {
             System.Threading.Thread.Sleep(100);
-            int count=0;
+            int count = 0;
             if (File.Exists(path))
-               
+
             {
-                  DateTime date;
+                DateTime date;
                 try
                 {
                     // get the taken date of the image , if there isnt taken date than get the LastWriteTime
-                    date = GetDateTakenFromImage(path);  
+                    date = GetDateTakenFromImage(path);
                     string year = String.Empty;
                     string month = String.Empty;
                     string msg = string.Empty;
-                   
+
                     year = date.Year.ToString();
                     month = date.Month.ToString();
                     string yearAndMonth = year + "\\" + month;
@@ -93,7 +112,7 @@ namespace ImageService.Modal
                     directory.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                     // create output folder.
                     string TargetFolder = m_OutputFolder + "\\" + yearAndMonth + "\\";
-                    Directory.CreateDirectory(m_OutputFolder + "\\" +yearAndMonth);
+                    Directory.CreateDirectory(m_OutputFolder + "\\" + yearAndMonth);
                     Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth);
 
                     System.Threading.Thread.Sleep(10);
@@ -102,9 +121,9 @@ namespace ImageService.Modal
                     {
                         File.Move(path, TargetFolder + p);
                         msg = "Added " + p + " to " + TargetFolder;
-                        count ++;
+                        count++;
                     }
-                  
+
 
                     if (!File.Exists(m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\" + p))
                     {
@@ -115,7 +134,7 @@ namespace ImageService.Modal
                             count++;
                         }
                     }
-                //    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
+                    //    if (count == 2) { msg = "Added " + p + " to " + TargetFolder + "and to" + m_OutputFolder + "\\" + "Thumbnails" + "\\" + yearAndMonth + "\\"; }
                     result = true;
                     return msg;
                 }
@@ -134,4 +153,3 @@ namespace ImageService.Modal
         #endregion
     }
 }
-            

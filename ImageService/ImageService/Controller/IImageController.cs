@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImageService.Commands;
+using ImageService.Modal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,9 @@ namespace ImageService.Controller
 {
     public interface IImageController
     {
+
+        event EventHandler<CommandRecievedEventArgs> SpecialCommanndAppeared;
+
         /// <summary>
         /// this method execute the Command Request
         /// </summary>
@@ -16,5 +21,6 @@ namespace ImageService.Controller
         /// <param name="result">bool if success or not.</param>
         /// <returns></returns>
         string ExecuteCommand(int commandID, string[] args, out bool result);          // Executing the Command Requet
+        void insertCommand(int id, ICommand c); //Adds a command to the dictionary
     }
 }

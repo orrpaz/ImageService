@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infasructure
+namespace Infrastructure.Enum
 {
     public enum CommandEnum : int
     {
@@ -12,6 +12,7 @@ namespace Infasructure
         GetConfigCommand,
         LogCommand,
         CloseCommand,
-        CloseHandler
+        CloseHandler,
+        ErrorOccurred
     }
 }
