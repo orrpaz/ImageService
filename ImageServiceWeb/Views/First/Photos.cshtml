@@ -1,0 +1,24 @@
+﻿@model ImageServiceWeb.Models.PhotosModel
+@{
+    ViewBag.Title = "Photos";
+}
+
+<h2>Photos</h2>
+@foreach (var item in Model.PhotosList)
+{
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <img src=@item.thumbnailPath alt="1234.jpg" class="img-circle" width="242" height="200">
+                <h3>@item.name</h3>
+                <p>Year: @item.year</p>
+                <p>Month: @item.month</p>
+                <p>
+                    <a href="@Url.Action("ShowRealPhoto", new { path = item.realPath})" class="btn btn-primary" role="button">View</a>
+                    <a href="@Url.Action("DeletePhoto", new { path = item.realPath})" class="btn btn-default" role="button">Delete</a>
+                </p>
+            </div>
+            <br />
+        </div>
+    </div>
+}

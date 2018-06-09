@@ -67,32 +67,38 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">event args</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            //Check if path is handler's path (or local)
-            if (e.RequestDirPath == this.m_path || e.RequestDirPath.Equals("*"))
+            try
             {
-                if (e.CommandID == (int)CommandEnum.CloseCommand)
+                //Check if path is handler's path (or local)
+                if (e.RequestDirPath == this.m_path || e.RequestDirPath.Equals("$Terminate$"))
                 {
-                    m_logging.Log("Close command execute in handler. Path: " + m_path, MessageTypeEnum.INFO);
-                    closeHandler();
-                    return;
-                }
-                bool isSuccess;
-                if (e.CommandID == (int)CommandEnum.NewFileCommand)
-                {
-                    if (e.RequestDirPath.Equals(this.m_path))
+                    if (e.CommandID == (int)CommandEnum.CloseCommand)
                     {
-                        string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out isSuccess);
-                        if (isSuccess)
+                        m_logging.Log("Close command execute in handler. Path: " + m_path, MessageTypeEnum.WARNING);
+                        closeHandler();
+                        return;
+                    }
+                    bool isSuccess;
+                    if (e.CommandID == (int)CommandEnum.NewFileCommand)
+                    {
+                        if (e.RequestDirPath.Equals(this.m_path))
                         {
-                          //  m_logging.Log("blablablablaaaaaaa", MessageTypeEnum.INFO);
-                            m_logging.Log(msg, MessageTypeEnum.INFO);
-                        }
-                        else
-                        {
-                            m_logging.Log("Error on execute command: " + msg, MessageTypeEnum.FAIL);
+                            string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out isSuccess);
+                            if (isSuccess)
+                            {
+                                //  m_logging.Log("blablablablaaaaaaa", MessageTypeEnum.INFO);
+                                m_logging.Log(msg, MessageTypeEnum.INFO);
+                            }
+                            else
+                            {
+                                m_logging.Log("Error on execute command: " + msg, MessageTypeEnum.FAIL);
+                            }
                         }
                     }
                 }
+            } catch(Exception)
+            {
+                Console.WriteLine("");
             }
         }
 

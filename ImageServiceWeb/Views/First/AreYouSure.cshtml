@@ -1,0 +1,44 @@
+﻿@model ImageServiceWeb.Models.ConfigModel
+
+@{
+    ViewBag.Title = "AreYouSure";
+}
+
+<h1>Are you sure you want to delete this handler?????</h1>
+<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+}
+.button2 {background-color: #f44336;}
+    </style>
+<button class="button" id="OK">OK</button>
+<button class="button button2" id="Cancel">Cancel</button>
+<script>
+
+
+    document.getElementById("OK").addEventListener("click", myFunction);
+    function myFunction() {
+        document.getElementById('OK').disabled = true;
+        document.getElementById('OK').style.background = "#cccccc";
+        document.getElementById('OK').style.border = "#999999"; /*Style of disable*/
+        document.getElementById('Cancel').disabled = true;
+        document.getElementById('Cancel').style.background = "#cccccc";
+        document.getElementById('Cancel').style.border = "#999999"; /*Style of disable*/
+        $.post("@Url.Action("MakeRemove")", function () {
+          window.location.href = "Config";
+        });
+        
+    }
+
+
+    $("#Cancel").click(function () {
+        window.location.href = "Config";
+    })
+</script>

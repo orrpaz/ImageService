@@ -21,7 +21,7 @@ namespace ImageServiceGUI.Views
     /// </summary>
     public partial class LogView : UserControl
     {
-        private VMLog vm_log;
+        private IVMLog vm_log;
 
         public LogView()
         {

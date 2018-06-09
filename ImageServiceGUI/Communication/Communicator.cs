@@ -2,12 +2,9 @@
 using Infrastructure.Enum;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,17 +16,14 @@ namespace ImageServiceGUI.Communication
         private TcpClient m_client;
         private static Mutex m_mutexx = new Mutex();
         private static Communicator m_instance;
-       // private bool connected = false;
-
+ 
         public event EventHandler<TCPEventArgs> GotTcpMessege;
 
-        //Constructor
         private Communicator()
         {
             bool result;
             StartConnection(out result);
             connectionIsOn = result;
-  //          connected = connectionIsOn;
         }
         /// <summary>
         /// Singelton
@@ -151,11 +145,6 @@ namespace ImageServiceGUI.Communication
                         try
                         {
                             string incomingMsg = reader.ReadString();
-                            //if (string.Compare(incomingMsg, "close") == 0)
-                            //{
-                            //    EndConnection();
-                            //    break;
-                            //}
                             TCPEventArgs info = JsonConvert.DeserializeObject<TCPEventArgs>(incomingMsg);
                             Console.WriteLine("Got: " + info.CommandID);
                             Console.WriteLine("Got: " + info.Args);

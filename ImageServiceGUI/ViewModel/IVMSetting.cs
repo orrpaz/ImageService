@@ -9,7 +9,7 @@ namespace ImageServiceGUI.ViewModel
 {
     public interface IVMSetting : INotifyPropertyChanged
     {
-        event PropertyChangedEventHandler PropertyChanged;
+        //event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// When prop change
         /// </summary>

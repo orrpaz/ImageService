@@ -16,8 +16,7 @@ namespace ImageServiceGUI.ViewModel
     class VMSetting : IVMSetting
     {
         private string selectedItem;
-        private SettingModel settingModel;
-       // private ObservableCollection<string> handlers { get; set; }
+        private ISettingModel settingModel;
 
         public event PropertyChangedEventHandler PropertyChanged;
         //On interface
@@ -65,7 +64,7 @@ namespace ImageServiceGUI.ViewModel
         /// prop name of thumbnailsize
         /// </summary>
 
-        public int VM_ThumbnailSize
+        public string VM_ThumbnailSize
         {
             get { return settingModel.ThumbnailSize; }
         }
@@ -113,7 +112,11 @@ namespace ImageServiceGUI.ViewModel
             }
 
         }
-        //'Remove' Button can be pressed only if item was selected
+        /// <summary>
+        ///'Remove' Button can be pressed only if item was selected
+        /// </summary>
+        /// <param name="obj">object</param>
+        /// <returns>if selected item was pressed</returns>
         private bool CanBeRemoved(object obj)
         {
             return (selectedItem != null);

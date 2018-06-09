@@ -21,7 +21,7 @@ namespace ImageServiceGUI.Views
     /// </summary>
     public partial class ViewSetting : UserControl
     {
-        private VMSetting vm;
+        private IVMSetting vm;
         public ViewSetting()
         {
             InitializeComponent();

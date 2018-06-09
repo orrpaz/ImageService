@@ -22,7 +22,6 @@ namespace ImageService.Server
     {
         #region Members
         private const int port = 8000;
-        private TcpListener m_listener;
         private IClientHandler m_ch;
         private IImageController m_controller;
         private ILoggingService m_logging;
@@ -55,7 +54,7 @@ namespace ImageService.Server
             }
             m_controller.SpecialCommanndAppeared += SendCommand;
            // m_controller.SpecialCommanndAppeared += PassLog;
-            m_logging.MessageRecieved += m_ch.UpdateClientsNewLog;
+           // m_logging.MessageRecieved += m_ch.UpdateClientsNewLog;
         }
 
         /// <summary>
@@ -89,8 +88,8 @@ namespace ImageService.Server
         public void CloseServer()
         {
             //Stop the listening
-            //Stop();
-            //SendCommand(new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, null));
+            Stop();
+            SendCommand(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, "$Terminate$"));
         }
 
         /// <summary>
@@ -99,7 +98,6 @@ namespace ImageService.Server
         /// <param name="e">args for the event</param>
         public void SendCommand(object sender, CommandRecievedEventArgs e)
         {
-            //m_logging.Log("In The Send Command AAAAA", MessageTypeEnum.INFO);
             CommandRecieved?.Invoke(sender, e);
         }
         /// <summary>

@@ -144,7 +144,7 @@ namespace ImageService
         /// </summary>
         protected override void OnStop()
         {
-            logging.Log("In onStop.", MessageTypeEnum.INFO);
+            logging.Log("Service was closed", MessageTypeEnum.INFO);
             ServiceStatus serviceStatus = new ServiceStatus();
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOP_PENDING;
             serviceStatus.dwWaitHint = 100000;

@@ -1,0 +1,11 @@
+﻿@model ImageServiceWeb.Models.PhotoArgs
+@{
+    ViewBag.Title = "PhotoArgs";
+}
+
+<h2>@Model.name</h2>
+<p>Year: @Model.year</p>
+<p>Month: @Model.month</p>
+<img src=@Model.realPath>
+<p><a href="@Url.Action("Photos")" class="btn btn-default" role="button">Back</a></p>
+<p><a href="@Url.Action("DeletePhoto", new { path = Model.realPath})" class="btn btn-default" role="button">Delete</a></p>

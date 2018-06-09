@@ -74,12 +74,7 @@ namespace ImageServiceGUI.Model
 
         public void HandleMessage(object sender, TCPEventArgs message)
         {
-            Console.WriteLine("aaaaaaaaaaa");
-
             int commandId = message.CommandID;
-            Console.WriteLine("Id: " + message.CommandID);
-            Console.WriteLine("logCommandId: " + (int)CommandEnum.LogCommand);
-            //            Console.WriteLine("Path: " + message.Args);
             try
             {
                 
@@ -93,7 +88,6 @@ namespace ImageServiceGUI.Model
                         LogArgs toInsert = new LogArgs(logType, logInfo);
                         App.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            //  Console.WriteLine(toInsert.logInfo);
                             AllLogs.Add(toInsert);
                         }));
                         
@@ -108,7 +102,6 @@ namespace ImageServiceGUI.Model
                 }
 
                 } catch (Exception e) {
-                Console.WriteLine("exception");
                 Console.WriteLine("exception: " + e.Message);
             }
         }

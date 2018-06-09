@@ -11,7 +11,9 @@ namespace ImageServiceGUI.ViewModel
     class VMMainWindow : IVMMainWindow
     {
         private IMainWindowModel m_modelWindow;
-        //Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public VMMainWindow()
         {
             m_modelWindow = new MainWindowModel();

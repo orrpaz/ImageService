@@ -9,7 +9,7 @@ namespace ImageServiceGUI.Model
 {
     interface IMainWindowModel : INotifyPropertyChanged
     {
-        event PropertyChangedEventHandler PropertyChanged;
+       // event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// represent if the gui is connected to the server of the service
         /// </summary>

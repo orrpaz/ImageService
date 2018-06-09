@@ -19,7 +19,9 @@ namespace ImageServiceGUI.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        //Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public VMLog()
         {
             logModel = new LogModel();

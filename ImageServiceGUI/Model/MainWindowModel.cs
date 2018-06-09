@@ -16,7 +16,6 @@ namespace ImageServiceGUI.Model
         public MainWindowModel()
         {
             Communicator client = Communicator.Instance;
-            //            client.StartConnection(out isConnected);
 
             isConnected = client.connectionIsOn;
         }
@@ -36,7 +35,7 @@ namespace ImageServiceGUI.Model
             }
         }
         /// <summary>
-        /// Might not be used right now. Act when property changed
+        /// On property changed
         /// </summary>
         /// <param name="name">prop name</param>
 

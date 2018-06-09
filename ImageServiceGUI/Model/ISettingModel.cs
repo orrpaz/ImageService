@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace ImageServiceGUI.Model
 {
@@ -16,6 +17,12 @@ namespace ImageServiceGUI.Model
         string OutputDirectory { set; get; }
         string SourceName { set; get; }
         string LogName { set; get; }
-        int ThumbnailSize { set; get; }
+        string ThumbnailSize { set; get; }
+        ObservableCollection<string> Listhandlers { get; set; }
+        /// <summary>
+        /// Remove Handler 
+        /// </summary>
+        /// <param name="selected"></param>
+        void RemoveHandler(string selected);
     }
 }

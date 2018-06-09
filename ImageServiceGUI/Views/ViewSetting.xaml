@@ -7,19 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
-        <Label Content="Settings" FontSize="25" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Blue" RenderTransformOrigin="2.634,0.921"/>
+        <Label Content="Settings" FontSize="27" FontWeight="UltraBlack" Foreground="Green" HorizontalAlignment="Center"  RenderTransformOrigin="2.5,1"/>
         <Grid>
             <Grid.Resources>
                 <Style x:Key="TitleConfig" TargetType="{x:Type TextBlock}">
-                    <Setter Property="Margin" Value="3"/>
-                    <Setter Property="Padding" Value="3"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="15"/>
+                    <Setter Property="Margin" Value="2.8"/>
+                    <Setter Property="Padding" Value="2.8"/>
+                    <Setter Property="FontWeight" Value="DemiBold"/>
                 </Style>
                 <Style x:Key="ValueConfig" TargetType="{x:Type TextBlock}">
-                    <Setter Property="Margin" Value="5"/>
-                    <Setter Property="Padding" Value="3"/>
-                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="Margin" Value="2.8"/>
+                    <Setter Property="Padding" Value="2.8"/>
+                    <Setter Property="FontSize" Value="15"/>
+                    <Setter Property="FontWeight" Value="UltraLight"/>
                 </Style>
             </Grid.Resources>
             <Grid.RowDefinitions>

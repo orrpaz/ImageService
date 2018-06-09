@@ -27,5 +27,9 @@ namespace ImageService.Server
         /// Broadcast massage to all clients
         /// </summary>
         void broadcastAllClients(string serialized);
+        /// <summary>
+        /// Close all the connections
+        /// </summary>
+        void closeAllConnections();
     }
 }

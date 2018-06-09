@@ -15,6 +15,8 @@ namespace ImageService.Logging
     {
         private List<MessageRecievedEventArgs> currentLog = new List<MessageRecievedEventArgs>();
 
+        // Comments On Interface
+
         public void AddToLog(object sender, MessageRecievedEventArgs log)
         {
             currentLog.Add(log);
@@ -35,6 +37,10 @@ namespace ImageService.Logging
                 return ToJson();
             }
         }
+        /// <summary>
+        /// Translate the log list to json objects
+        /// </summary>
+        /// <returns></returns>
         private string ToJson()
         {
             List<JObject> temp = new List<JObject>();

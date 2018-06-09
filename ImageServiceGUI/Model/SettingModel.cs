@@ -21,11 +21,6 @@ namespace ImageServiceGUI.Model
             Communicator client = Communicator.Instance;
             client.getFromServer(); //Make it listen to server massages
             client.GotTcpMessege += HandleMessage;
-            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            Console.WriteLine(MessageTypeEnum.FAIL);
-            Console.WriteLine(MessageTypeEnum.INFO);
-            Console.WriteLine(MessageTypeEnum.WARNING);
-            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             getConfig();
         }
         /// <summary>
@@ -61,7 +56,7 @@ namespace ImageServiceGUI.Model
             JObject manager = JObject.Parse(information);
             string str = (string)manager["handlerPaths"];
             List<string> str2 = JsonConvert.DeserializeObject<List<string>>(str);
-            ThumbnailSize = (int)manager["thumbnailSize"];
+            ThumbnailSize = (manager["thumbnailSize"]).ToString();
             OutputDirectory = (string)manager["outputDir"];
             LogName = (string)manager["logName"];
             SourceName = (string)manager["eventSourceName"];
@@ -99,25 +94,6 @@ namespace ImageServiceGUI.Model
                             {
                                 Listhandlers.Remove(message.Args);
                             }));
-                            //Console.WriteLine("Path: " + message.Args);
-                            //foreach (string s in Listhandlers)
-                            //{
-                            //    Console.WriteLine("remaning: " + s);
-                            //    if (message.Args.Equals(s))
-                            //    {
-                            //        Console.WriteLine("Equals!");
-                            //    }
-                            //}
-                            //Console.WriteLine("Handler Removed!!! path: " + message.Args);
-                            //Console.WriteLine(Listhandlers.ToString());
-                            //foreach (string s in Listhandlers)
-                            //{
-                            //    Console.WriteLine("remaning: " + s);
-                            //    if (message.Args.Equals(s))
-                            //    {
-                            //        Console.WriteLine("Equals!");
-                            //    }
-                            //}
                         } catch (Exception e)
                         {
                             Console.WriteLine(e.Data);
@@ -141,7 +117,7 @@ namespace ImageServiceGUI.Model
         private string outputDirectory;
         private string sourceName;
         private string logName;
-        private int thumbnailSize;
+        private string thumbnailSize;
         private ObservableCollection<string> handlers = new ObservableCollection<string>();
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -188,11 +164,11 @@ namespace ImageServiceGUI.Model
             get { return logName; }
         }
         //Property of thumbnailsize
-        public int ThumbnailSize
+        public string ThumbnailSize
         {
             set
             {
-                thumbnailSize = value;
+                thumbnailSize = value.ToString();
                 OnPropertyChanged("ThumbnailSize");
             }
             get {

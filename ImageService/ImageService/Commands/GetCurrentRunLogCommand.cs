@@ -33,7 +33,7 @@ namespace ImageService.Commands
             {
                 result = true;
                 return m_currentLog.GetCurrentRunLog;
-            } catch(Exception e)
+            } catch(Exception)
             {
                 result = false;
                 return "Failed to get current log";

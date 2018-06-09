@@ -44,22 +44,22 @@ namespace ImageService.Communtication
                         {
                             TcpClient client = listener.AcceptTcpClient();
                             Console.WriteLine("Got new connection");
-                            m_logging.Log("Got new connection!", MessageTypeEnum.INFO);
                             ch.HandleClient(client);
                         }
                         catch (SocketException)
                         {
-                            m_logging.Log("Fail to establish new conection", MessageTypeEnum.FAIL);
+                            m_logging.Log("Server stopped", MessageTypeEnum.FAIL);
+                            ch.closeAllConnections();
                             break;
                         }
                     }
                     Console.WriteLine("Server stopped");
-                    m_logging.Log("Server stopped", MessageTypeEnum.INFO);
                 });
                 task.Start();
             }
             public void Stop()
             {
+                ch.closeAllConnections();
                 listener.Stop();
             }
 
